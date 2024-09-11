@@ -1,0 +1,10 @@
+- Apply Extention method to add configuration to program file.
+- Implement Cors Configurations
+- Implement IIS Configurations
+- Apply Logging with NLog
+- Apply Onion Architect
+- Apply Entity Framework
+- Implement Generic Repository Pattern
+- Implement Repository Manager
+- Using Lazy<T> Denpendency Injection
+- Implement Global Error Handling
