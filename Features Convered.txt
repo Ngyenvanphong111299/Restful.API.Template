@@ -1,10 +1,16 @@
+//Technicles Applied
 - Apply Extention method to add configuration to program file.
-- Implement Cors Configurations
-- Implement IIS Configurations
 - Apply Logging with NLog
 - Apply Onion Architect
 - Apply Entity Framework
-- Implement Generic Repository Pattern
-- Implement Repository Manager
-- Using Lazy<T> Denpendency Injection
-- Implement Global Error Handling
+- Apply Lazy<T> Denpendency Injection
+- Apply Generic Repository Pattern (Repository/RepositoryBase.cs)
+- Apply Repository Manager (Repository/RepositoryManager.cs)
+
+//API implementation
+- Implement Cors Configurations (API/ServiceExtentions/ServiceExtention.cs)
+- Implement IIS Configurations (API/ServiceExtentions/ServiceExtention.cs)
+- Implement Global Error Handling (API/Extensions/ExceptionMiddlewareExtensions.cs)
+- Implement Content Negotiation	Config (Program.cs)
+- Implement Custom Media Type (csv) (API/OutputFormatters/CsvOutputFormatter.cs)
+- Implement Custom Model Binding (array) (Presentation/ModelBinders/ArrayModelBinder.cs)

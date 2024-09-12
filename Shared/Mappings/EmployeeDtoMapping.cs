@@ -6,9 +6,25 @@ namespace Shared.Mappings
     public static class EmployeeDtoMapping
     {
         public static EmployeeDto MapToDto(this Employee employee)
-            => new(employee.Id, employee.Name ?? "", employee.Age, employee.Position ?? "");
+            => new()
+            {
+                Id = employee.Id,
+                Name = employee.Name ?? "",
+                Age = employee.Age,
+                Position = employee.Position ?? "",
+            };
 
         public static IEnumerable<EmployeeDto> MapToDtos(this IEnumerable<Employee> employees)
-            => employees.Select(x => x.MapToDto()).ToList();
+            => [.. employees.Select(x => x.MapToDto())];
+
+        public static Employee MapToCreationEntity(this EmployeeForCreationDto employeeForCreationDto)
+        {
+            return new()
+            {
+                Name = employeeForCreationDto.Name,
+                Age = employeeForCreationDto.Age,
+                Position = employeeForCreationDto.Position,
+            };
+        }
     }
 }
