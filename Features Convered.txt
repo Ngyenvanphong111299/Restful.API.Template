@@ -6,11 +6,20 @@
 - Apply Lazy<T> Denpendency Injection
 - Apply Generic Repository Pattern (Repository/RepositoryBase.cs)
 - Apply Repository Manager (Repository/RepositoryManager.cs)
+- Apply Asynchnorous Programing.
 
 //API implementation
 - Implement Cors Configurations (API/ServiceExtentions/ServiceExtention.cs)
 - Implement IIS Configurations (API/ServiceExtentions/ServiceExtention.cs)
-- Implement Global Error Handling (API/Extensions/ExceptionMiddlewareExtensions.cs)
+- Implement Global Error Handling (status: 500) (API/Extensions/ExceptionMiddlewareExtensions.cs)
 - Implement Content Negotiation	Config (Program.cs)
 - Implement Custom Media Type (csv) (API/OutputFormatters/CsvOutputFormatter.cs)
 - Implement Custom Model Binding (array) (Presentation/ModelBinders/ArrayModelBinder.cs)
+- Implement Get/Post/Put/Delete/Patch sample APIs (Presentation/Controllers)
+- Implement Validation using Data Anotation Attribute (Shared/Dtos)
+- Implement Action Filter for validate Null Model (API/ActionFilters/ValidationFilterAttribute.cs)
+- Implement Data Paging (PagedList and MetaData response) (Shared/RequestFeatures)
+- Implement Data Filtering (Shared/RequestFeatures)
+- Implement Data Searching (Shared/ReqeustFeatures)
+- Implement Data Sorting (Shared/RequestFeatures)
+----

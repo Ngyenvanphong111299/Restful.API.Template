@@ -9,45 +9,45 @@ namespace Service
 {
     internal sealed class CompanyService(IRepositoryManager _repository, ILoggerManager logger) : ICompanyService
     {
-        public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges)
+        public async Task<IEnumerable<CompanyDto>> GetAllCompaniesAsync(bool trackChanges)
         {
-            var companies = _repository.Company.GetAllCompanies(trackChanges);
+            var companies = await _repository.Company.GetAllCompaniesAsync(trackChanges);
             var companiesDto = companies.MapToDtos();
             return companiesDto;
         }
 
-        public CompanyDto GetCompany(Guid id, bool trackChanges)
+        public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges)
         {
-            var company = _repository.Company.GetCompany(id, trackChanges) ?? throw new CompanyNotFoundException(id);
+            var company = await GetCompanyAndCheckIfItExists(id, trackChanges);
             var companyDto = company.MapToDto();
             return companyDto;
         }
 
-        public CompanyDto CreateCompany(CompanyForCreationDto company)
+        public async Task<CompanyDto> CreateCompanyAsync(CompanyForCreationDto company)
         {
             var companyEntity = company.MapToCreationEntity();
             _repository.Company.CreateCompany(companyEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
 
             var companyToReturn = companyEntity.MapToDto();
             return companyToReturn;
         }
 
-        public IEnumerable<CompanyDto> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<IEnumerable<CompanyDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
         {
             if (ids is null)
                 throw new IdParametersBadRequestException();
-            
-            var companyEntities = _repository.Company.GetByIds(ids, trackChanges);
-            
+
+            var companyEntities = await _repository.Company.GetByIdsAsync(ids, trackChanges);
+
             if (ids.Count() != companyEntities.Count())
                 throw new CollectionByIdsBadRequestException();
-            
+
             var companiesToReturn = companyEntities.MapToDtos();
             return companiesToReturn;
         }
 
-        public (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection(IEnumerable<CompanyForCreationDto> companyCollection)
+        public async Task<(IEnumerable<CompanyDto> companies, string ids)> CreateCompanyCollectionAsync(IEnumerable<CompanyForCreationDto> companyCollection)
         {
             if (companyCollection is null)
                 throw new CompanyCollectionBadRequest();
@@ -57,11 +57,32 @@ namespace Service
             {
                 _repository.Company.CreateCompany(company);
             }
-            _repository.Save();
+            await _repository.SaveAsync();
 
             var companyCollectionToReturn = companyEntities.MapToDtos();
             var ids = string.Join(",", companyCollectionToReturn.Select(c => c.Id));
             return (companies: companyCollectionToReturn, ids);
         }
+
+        public async Task DeleteCompanyAsync(Guid companyId, bool trackChanges)
+        {
+            var company = await GetCompanyAndCheckIfItExists(companyId, trackChanges);
+            _repository.Company.DeleteCompany(company);
+            await _repository.SaveAsync();
+        }
+
+        public async Task UpdateCompanyAsync(Guid companyId, CompanyForUpdateDto companyForUpdate, bool trackChanges)
+        {
+            var company = await GetCompanyAndCheckIfItExists(companyId, trackChanges);
+            company.MapToUpdateEntity(companyForUpdate);
+            await _repository.SaveAsync();
+        }
+
+        private async Task<Company> GetCompanyAndCheckIfItExists(Guid companyId, bool trackChanges)
+        {
+            var company = await _repository.Company.GetCompanyAsync(companyId, trackChanges);
+            return company is null ? throw new CompanyNotFoundException(companyId) : company;
+        }
     }
 }
+
